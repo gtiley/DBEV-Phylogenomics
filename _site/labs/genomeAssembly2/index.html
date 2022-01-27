@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Scaffolding with Hi-C | DBEV Phylogenomics Workshop 2022</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Scaffolding with Hi-C" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<meta property="og:description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<link rel="canonical" href="http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly2/" />
+<meta property="og:url" content="http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly2/" />
+<meta property="og:site_name" content="DBEV Phylogenomics Workshop 2022" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scaffolding with Hi-C" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly2/","@type":"WebPage","description":"Workshop based on delivering contemporary and practical education materials for phylogenetics","headline":"Scaffolding with Hi-C","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/DBEV-Phylogenomics/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/DBEV-Phylogenomics/feed.xml" title="DBEV Phylogenomics Workshop 2022" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/DBEV-Phylogenomics/">DBEV Phylogenomics Workshop 2022</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/DBEV-Phylogenomics/about/">About</a><a class="page-link" href="/DBEV-Phylogenomics/people/">People</a><a class="page-link" href="/DBEV-Phylogenomics/schedule/">Schedule</a><a class="page-link" href="/DBEV-Phylogenomics/reading/">Reading</a><a class="page-link" href="/DBEV-Phylogenomics/conduct/">Code of Conduct</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Scaffolding with Hi-C</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Hopefully some of the team assemblies are done by this point. Last week, we assembled contigs using various input data and algorithm combinations. Did one strategy or group of strategies appear more beneficial? Ordering those contigs at the correct physical distances on chromosomes though can be difficult, and can greatly affect some analyses of genome architecture or even identifying variants in a population. This week, we will use a <em>scaffolding</em> strategy using high-throughput chromosome conformation capture (Hi-C) data.</p>
+
+<p style="text-align: center;"><img src="/DBEV-Phylogenomics/images/HiC_Fig1A.png" alt="Rao et al. 2014 Fig. 1A" /></p>
+<p><strong>Fig. 1A from Rao et al. 2014<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>-</strong> Hi-C library preparation by crosslinking DNA interacting with chromatin and restriction digestion to form a distribution of inserts, some small and some very large.</p>
+
+<p>Although originally intended to investigate DNA-DNA interactions in the cell, such as enhancers and promoter regions coming in contact with each other by forming <em>loops</em>, the range of insert sizes provides the mate information from paired end reads to scaffold entire chromosomes. Although there can be interactions between chromosomes or distal ends of the same chromosome, regions that are physically close together have the most interactions and this is reflected by the frequency that fragments occur in the library. Hi-C libraries can be visualized as 2-d contact maps, where the x- and y-axes are bins of some size and the heatmap intensity is the normalized frequency of a fragment. The scaffolding algorithm finds a path between contigs for scaffolding based on these frequencies. Messy genome assemblies will have contact maps that are very fuzzy while correctly oriented assemblies will generate the most intense signals along the diagonal.</p>
+
+<p style="text-align: center;"><img src="/DBEV-Phylogenomics/images/HiCAssembly_FigS6.png" alt="Dudchenko et al. 2017 Fig. S6" /></p>
+<p><strong>Fig. S6 from Dudchenko et al. 2017<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>-</strong> Contact map of human genome. Heat map intensity corresponds to frequency of observed contacts within a bin. Because most interactions happen on the same chromosome, the strongest signals are between adjoining regions. Hi-C can also detect interactions between more distant regions, but the correct path is resolved by the graph weights.</p>
+
+<p>You will continue to run analyses in your <code class="language-plaintext highlighter-rouge">/work</code> directory. You should use the contigs from your team’s assemblies last week, and continue to work in teams. Everybody can run the analyses in their own work directory though.</p>
+
+<p>Today’s goals are:</p>
+<ol>
+  <li>Generate a file of Hi-C contacts by aligning an Illumina-sequenced Hi-C library to your assembled contigs (Juicer)</li>
+  <li>Scaffold those contigs into your final assembly (3-d DNA)</li>
+  <li>Inspect the contact maps visually (3-d DNA)</li>
+</ol>
+
+<p>First, we will be doing some copying and uncompressing on the cluster that takes a little more bandwith than we should be using on the head node. Let’s get a processor on the compute node</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>srun --ntasks=1 --cpus-per-task=1 --mem-per-cpu=4gb --partition=common --account=bio790s-01-f21 --pty bash -i
+</code></pre></div></div>
+
+<p>If you now check your running jobs with <code class="language-plaintext highlighter-rouge">squeue -u YOUR_NETID</code>, you should now see an interactive session that says “bash”</p>
+
+<p>We are using tools from the Liberman-Aiden lab and largely following their software tutorials on <a href="https://github.com/aidenlab/juicer/wiki/Running-Juicer-on-a-cluster">juicer</a> and <a href="https://aidenlab.org/assembly/manual_180322.pdf">3d-dna</a>. To configure the software requires some careful specification of directories and input files. Much of this has been pre-configured in</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly2
+</code></pre></div></div>
+<p>You will want to copy this whole directory into your work directory, but need to pay close attention to edit files when preparing for your own contigs specifying the new work folder location.</p>
+
+<p><strong>Getting Hi-C Contacts from Short-Read Alignment</strong></p>
+
+<p>The first thing you need to do is copy your contigs into the <code class="language-plaintext highlighter-rouge">genomeAssembly2/juicedir/references</code> folder. You will then index the genome with BWA. Delete the old fasta and index files if using your own. You will need to edit the submission script for BWA appropriately too. Here are some mock instructions:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd YOUR_WORK_DIR/evolutionaryGenomics
+cp -r /hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly2 .
+cd genomeAssembly2/juicedir/references
+cp /YOUR_WORK_DIR/evolutionaryGenomics/genomeAssembly1/PATH_TO_CONTIGS/YOUR_CONTIGS.fasta .
+emacs getBWAindex.sh
+#sbatch getBWAindex.sh
+</code></pre></div></div>
+
+<p>Genome indexing should be fast, but we will do something else while this happens. Go into the <code class="language-plaintext highlighter-rouge">restriction_sites</code> folder, where we will generate a list of expected fragment lengths from the digestion with MboI and a list of contig lengths. Edit the submission script as need be. We use a simple python script provided with juicer to get the restriction site lists. We then use an awk one-liner to get the contig names and lengths, which are the first and last elements per-line resulting from the thrip_MboI.txt file.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../restriction_sites
+emacs getRestrictionSites.sh
+#sbatch getRestrictionSites.sh
+</code></pre></div></div>
+
+<p>We would normally like to use symbolic links to access fastq files, but this seemed to cause some problems for juicer. Instead, we will all have copies of the fastq files in our work directories. Furthermore they need to be decompressed and renamed as *_R1.fastq and *_R2.fastq</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../../HiC-scaffolding/fastq
+gunzip SRR11601864_R1.fq.gz
+gunzip SRR11601864_R2.fq.gz
+mv SRR11601864_R1.fq SRR11601864_R1.fastq
+mv SRR11601864_R2.fq SRR11601864_R2.fastq
+</code></pre></div></div>
+
+<p>You should now be ready to run juicer. We will go back to the HiC-scaffolding directory where we will run the juicer script. Be careful to edit it correctly. You will need to provide the correct path of the juicedir <code class="language-plaintext highlighter-rouge">-D</code>, the reference fasta <code class="language-plaintext highlighter-rouge">-z</code>, the chrom.sizes file <code class="language-plaintext highlighter-rouge">-p</code>, and the restriction site fragment size file <code class="language-plaintext highlighter-rouge">-y</code>. Provide the correct path to the <code class="language-plaintext highlighter-rouge">juicer.sh</code> script in your juicedir/scripts folder too.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../
+emacs runJuicer.sh
+#sbatch runJuicer.sh
+</code></pre></div></div>
+
+<p>Now we wait a while, BWA has to align the Hi-C reads to the contigs before we can proceed. The runJuicer.sh script actually farms out the jobs on the cluster. These types of things always make me nervous as they take away your control over scheduling directives. This should be ok, but it does not hurt to check with your cluster contacts before running these things for a serious project that mis-allocates a lot of resources.</p>
+
+<p><strong>Scaffolding the Assembly</strong></p>
+
+<p>Juicer should have produced a file called merged_nodups.txt - this is the list of contacts used for building the graph used in scaffolding. The scaffolder takes the original fasta file of contigs and used the contacts to order them. We pass an additional option, <code class="language-plaintext highlighter-rouge">-m diploid</code> here since our thrip library is made from a whole pulverized brood. In this case, the whole-genome aligner, lastz, will be used to align and collapse scaffolds that might otherwise be treated differently due to heterozygosity. Edit the script and get 3d-DNA started. There are a lot of options available with the scaffolding algorithm too, have a look at some and see if you want to change some:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/hpc/group/bio790s-01-f21/evolutionaryGenomics/programs/3d-dna/run-asm-pipeline.sh --help
+</code></pre></div></div>
+
+<p>For example, what happens if you increase the mapping quality threshold? Maybe make a few changes that you think will help prevent misjoins.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd YOUR_WORK_DIR/evolutionaryGenomics/genomeAssembly2/HiC-scaffolding
+emacs run3dDNA.sh
+#sbatch run3dDNA.sh
+</code></pre></div></div>
+
+<p>This should produce three important files:</p>
+<ol>
+  <li>PREFIX.final.fasta</li>
+  <li>PREFIX.final.hic</li>
+  <li>PREFIX.final.assembly</li>
+</ol>
+
+<p>The fasta file is of course your <em>possibly</em> near-chromosome-level scaffolded genome. The hic and assembly files can be used as input to the visualization software, where it is possible to further annotate the assembly and correct putative errors. Evaluate the basic assembly stats of your PREFIX.final.fasta with quast, how is the N50 looking now?</p>
+
+<p><strong>Visualization</strong></p>
+
+<p>We will do this activity together in real time if allowed. These visualization steps will happen on your own computer rather than the cluster. Be warned that the application has to store a whole genome and its metadata to memory, so the application may crash on some of your laptops.</p>
+
+<p>First, download <a href="https://github.com/aidenlab/Juicebox/wiki/Download">Juicebox</a></p>
+
+<p>If we do not make it to the real-time activity, there are many resources available from the Aiden lab to help guide you:</p>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=Nj7RhQZHM18">Introduction to contact maps video</a></li>
+  <li><a href="https://aidenlab.gitbook.io/juicebox/">Step-by-step Juicebox tutorial</a></li>
+  <li><a href="https://github.com/aidenlab/Juicebox/wiki/Juicebox-Assembly-Tools">Helpful notes</a></li>
+  <li><a href="https://www.youtube.com/watch?v=xA6CLsG_GAs">Real-time misjoin correction</a></li>
+</ul>
+
+<p>Try to compare contact maps with others that had a different assembly strategy for generating contigs, how do they look?</p>
+
+<h3 id="references">References</h3>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Rao SSP, Huntley MH, Durand NC, Stamenova EK, Bochkov ID, Robinson JT, Sanborn AL, Machol I, Omer AD, Lander ES, Lieberman-Aiden E. 2014. A 3D map of the human genome at kilobase resolution reveals principles of chromatin looping. Cell. 159:1665-1680. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>Dudchenko O, Batra SS, Omer AD, Nyquist SK, Hoeger M, Durand NC, Shamim MS, Machol I, Lander ES, Aiden AP, Lieberman-Aiden E. 2017. De novo assembly of the <em>Aedes aegypti</em> genome using Hi-C yields chromosome-length scaffolds. Science 356:92-95. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/DBEV-Phylogenomics/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">DBEV Phylogenomics Workshop 2022</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">DBEV Phylogenomics Workshop 2022</li><li><a class="u-email" href="mailto:g.tiley@kew.org">g.tiley@kew.org</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gtiley"><svg class="svg-icon"><use xlink:href="/DBEV-Phylogenomics/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gtiley</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Workshop based on delivering contemporary and practical education materials for phylogenetics</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

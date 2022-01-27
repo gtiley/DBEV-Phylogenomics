@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Getting started with computing | DBEV Phylogenomics Workshop 2022</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Getting started with computing" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<meta property="og:description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<link rel="canonical" href="http://localhost:4000/DBEV-Phylogenomics/labs/introduction/" />
+<meta property="og:url" content="http://localhost:4000/DBEV-Phylogenomics/labs/introduction/" />
+<meta property="og:site_name" content="DBEV Phylogenomics Workshop 2022" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Getting started with computing" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/DBEV-Phylogenomics/labs/introduction/","@type":"WebPage","description":"Workshop based on delivering contemporary and practical education materials for phylogenetics","headline":"Getting started with computing","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/DBEV-Phylogenomics/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/DBEV-Phylogenomics/feed.xml" title="DBEV Phylogenomics Workshop 2022" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/DBEV-Phylogenomics/">DBEV Phylogenomics Workshop 2022</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/DBEV-Phylogenomics/about/">About</a><a class="page-link" href="/DBEV-Phylogenomics/people/">People</a><a class="page-link" href="/DBEV-Phylogenomics/schedule/">Schedule</a><a class="page-link" href="/DBEV-Phylogenomics/reading/">Reading</a><a class="page-link" href="/DBEV-Phylogenomics/conduct/">Code of Conduct</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Getting started with computing</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Our first day is simply making sure everybody has the basic tools to participate in the course. There are four goals today:</p>
+<ol>
+  <li>Log on to the DCC cluster</li>
+  <li>Perform basic UNIX operations</li>
+  <li>Run some scripts</li>
+  <li>Recognize the difference between interpreted and compiled languages</li>
+</ol>
+
+<p>Some or all of this may be very familiar to many of you. Today is about getting everybody on the same page for advancing later in the course. Please take time to help your less familiar neighbors.</p>
+
+<p>There may be some necessary downloads for your own computers in order to log onto the cluster and edit files.</p>
+
+<p><strong>Windows</strong></p>
+<ul>
+  <li><a href="https://git-for-windows.github.io/">Git for Windows</a></li>
+  <li><a href="https://notepad-plus-plus.org/download/v8.1.3/">Notepad++</a></li>
+  <li><a href="https://strawberryperl.com/">Perl</a></li>
+  <li><a href="https://www.python.org/downloads/windows/">Python</a></li>
+</ul>
+
+<p><strong>Mac</strong></p>
+<ul>
+  <li><a href="https://www.barebones.com/products/bbedit/">BBEdit</a></li>
+  <li>I recommend downloading the command line tools from the developer <a href="https://developer.apple.com/">website</a></li>
+  <li>Although Macs come with Python v2.7, Python 2 is no longer supported. Current and future applications are moving to Python 3 and here is a decent <a href="https://docs.python-guide.org/starting/install3/osx/">guide</a> for not messing up your system</li>
+</ul>
+
+<p><strong>Linux</strong></p>
+<ul>
+  <li>you should be set up</li>
+</ul>
+
+<p>More downloads will arise as the course progresses.</p>
+
+<h3 id="moving-files-between-your-computer-and-the-cluster">Moving files between your computer and the cluster</h3>
+<p>Let’s start by downloading materials for today. Open your command-line prompt (using git-bash for Windows users). I suggest making a folder to organize all of the class materials in one place.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~
+ls
+mkdir evolutionaryGenomics
+cd evolutionaryGenomics
+pwd
+</code></pre></div></div>
+<p>Several things happened here. We <em>change directory</em> with <code class="language-plaintext highlighter-rouge">cd</code> and <em>list</em> files with <code class="language-plaintext highlighter-rouge">ls</code>. These are UNIX commands that will help us navigate the cluster. The <code class="language-plaintext highlighter-rouge">~</code> is an alias for our home directory, you can put this folder somewhere else if you prefer. We then <em>make directory</em> named evolutionaryGenomics with <code class="language-plaintext highlighter-rouge">mkdir</code>. We then change into that directory and check the location of the <em>present working directory</em> with <code class="language-plaintext highlighter-rouge">pwd</code>.</p>
+
+<p>Now you will log into the cluster. Then you will copy materials from a shared folder to your user directory (on the cluster) in our group space where some storage is configured. You will then move those files from your user directory on the cluster to your computer with a <em>secure copy</em> using <code class="language-plaintext highlighter-rouge">scp</code>. These files are also available on <a href="https://github.com/gtiley/EvolutionaryGenomics/tree/main/data/introduction">GitHub</a>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh YOUR_USER_NAME@dcc-login.oit.duke.edu
+cd /hpc/group/bio790s-01-f21
+mkdir YOUR_USER_NAME
+cd YOUR_USER_NAME
+cp -r /hpc/group/bio790s-01-f21/evolutionaryGenomics/introduction .
+exit
+scp -r YOUR_USER_NAME@dcc-login.oit.duke.edu:/hpc/group/bio790s-01-f21/YOUR_USER_NAME/introduction .
+ls
+</code></pre></div></div>
+
+<p>Now we will look around at today’s contents</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd introduction
+ls
+cd data
+ls
+</code></pre></div></div>
+<p>Again, we <em>change directory</em> with <code class="language-plaintext highlighter-rouge">cd</code> and <em>list</em> files with <code class="language-plaintext highlighter-rouge">ls</code> on our computer just as we did on the cluster. Let’s have a look at one of the files in <code class="language-plaintext highlighter-rouge">data</code> - <code class="language-plaintext highlighter-rouge">welcomeMessage.txt</code>. We will open it with a text editor directly in the command line.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emacs welcomeMessage.txt
+</code></pre></div></div>
+<p>There is some information about myself in there. But we want to know about you! Use the arrows to edit the information about yourself. Keep the research interest to 6 words only. Saving changes through a text editor such as emacs requires keyboard shortcuts - <code class="language-plaintext highlighter-rouge">control</code> + <code class="language-plaintext highlighter-rouge">x</code> + <code class="language-plaintext highlighter-rouge">s</code> to save and <code class="language-plaintext highlighter-rouge">control</code> + <code class="language-plaintext highlighter-rouge">x</code> + <code class="language-plaintext highlighter-rouge">c</code> to close. Alternatively, you could open and edit this file with your text editor such as Notepad++ or BBEdit. Please check that you are using UNIX-style line breaks.
+Now we need to rename the file to make it unique. We can rename a file with <em>move</em> <code class="language-plaintext highlighter-rouge">mv</code>. You will then transfer your edited and rename file back to the cluster and you We will then <em>copy</em> it to a shared directory using <code class="language-plaintext highlighter-rouge">cp</code>. Rather than giving the complete path, we use <code class="language-plaintext highlighter-rouge">../</code> to go back a directory.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mv welcomeMessage.txt welcomeMessage.YOUR_NAME.txt
+scp welcomeMessage.YOUR_NAME.txt YOUR_USER_NAME@dcc-login.oit.duke.edu:/hpc/group/bio790s-01-f21/YOUR_USER_NAME/introduction
+ssh YOUR_USER_NAME@dcc-login.oit.duke.edu
+cd /hpc/group/bio790s-01-f21/YOUR_USER_NAME/introduction
+cp welcomeMessage.YOUR_NAME.txt ../../evolutionaryGenomics/introduction/messages
+</code></pre></div></div>
+<p>After everybody has their edited welcome messages available, we will update the people <a href="https://gtiley.github.io/EvolutionaryGenomics/people/">page</a> using a script. What exactly is a script?</p>
+
+<h3 id="interpreted-code---scripting">Interpreted Code - Scripting</h3>
+<p>Most genomics applications happen, at least in part, with scripting. Scripting languages are great for performing operations on strings or text, like ACGT. They are also not bad for a human to understand and hide the messiness of turning human-readable code to machine-readable code (compiling). That is the work of the interpreter, which happens in real-time. Scripting languages include Python, Perl, and Ruby. You can also accomplish a bit with bash and awk, but my heart-felt recommendation would be to dedicate some time into learning Python if you are new to this.</p>
+
+<p>Let’s see some simple scripts in action and hint at how they might be useful. In <code class="language-plaintext highlighter-rouge">data/</code>, you will find three files <code class="language-plaintext highlighter-rouge">*.params</code> with some results from a model.</p>
+
+<p>In all omics data, we are often iterating over many things (e.g. loci, individuals, populations, bootstrap replicates) to do something repetitive. Let’s execute three different scripts that will allow us to loop over the <code class="language-plaintext highlighter-rouge">*.params</code> files.</p>
+
+<h4 id="loopfilessh---a-simple-bash-script">loopFiles.sh - a simple bash script</h4>
+<p>The first line is a shebang. This is letting your computer know which interpreter program to use. Our first example is using bash, which will be available on any UNIX system. First, all of the <code class="language-plaintext highlighter-rouge">*.params</code> files are collected into a single array or list. We then iterate over the number of elements in that array, print the element to the screen, and quit the script.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash                                                                                                                   </span>
+
+<span class="nv">fileList</span><span class="o">=</span><span class="s2">"../data/*.params"</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="nv">$fileList</span>
+<span class="k">do
+  </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+<p>Let’s run this simple script on your own system first. We can execute programs that are not in our <em>path</em> by specifying the location. If we are in the same folder that we want to execute a program from we would go <code class="language-plaintext highlighter-rouge">./loopFiles.sh</code> such that <code class="language-plaintext highlighter-rouge">.</code> means <em>here</em>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/evolutionaryGenomics/introduction/scripts
+./loopFiles.sh
+</code></pre></div></div>
+<p>Already a problem, nothing happens. To run a script this way, we need to let the computer know it is an executable program. <code class="language-plaintext highlighter-rouge">chmod</code> can be used to change the execute, read, and write permissions of files and folders.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod u+x loopFiles.sh
+./loopFiles.sh
+</code></pre></div></div>
+<p>The file names should now print to your screen.</p>
+
+<h4 id="loopfilespl---give-me-perl">loopFiles.pl - give me Perl</h4>
+<p>Perl is a popular scripting language that is the glue of the internet and played a large role in early genomics applications. It still is, but has waned in popularity as various R packages and the more recent Python has exploded in popularity. It will give you more flexibility than bash in the long-term and can be quick to learn. Here, we use the <em>glob</em> function to get an array of the file names. We then loop over array elements from their starting position (0) to the end (2) by getting the number of elements in the array with <em>scalar</em> and subtracting 1.</p>
+<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/perl -w                                                                                                            </span>
+
+<span class="nv">@fileList</span> <span class="o">=</span> <span class="nb">glob</span><span class="p">("</span><span class="s2">../data/*.params</span><span class="p">");</span>
+<span class="k">for</span> <span class="nv">$i</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="p">(</span><span class="nb">scalar</span><span class="p">(</span><span class="nv">@fileList</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">print</span> <span class="p">"</span><span class="si">$fileList</span><span class="s2">[</span><span class="si">$i</span><span class="s2">]</span><span class="se">\n</span><span class="p">";</span>
+<span class="p">}</span>
+<span class="nb">exit</span><span class="p">;</span>
+</code></pre></div></div>
+<p>We could make this script executable as we did with the bash script, or we could go</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>perl loopFiles.pl
+</code></pre></div></div>
+
+<h4 id="loopfilespy---python-and-its-libraries">loopFiles.py - Python and its libraries</h4>
+<p>Python is certainly the zeitgeist of bioinformatics and genomics today. Python is more recent than Perl. Although they do similar things, there has been a lot of development on improving abstraction and this is supported by many libraries (or modules). These are groups of functions that you let python know you want to use with the <code class="language-plaintext highlighter-rouge">import &lt;module&gt;</code> syntax. Here we load two very basic modules <code class="language-plaintext highlighter-rouge">sys</code> and <code class="language-plaintext highlighter-rouge">os</code>, but a third one we actually use, <code class="language-plaintext highlighter-rouge">glob</code>! We can use functions from modules by going <code class="language-plaintext highlighter-rouge">&lt;module&gt;.&lt;function&gt;()</code>, so we see <code class="language-plaintext highlighter-rouge">glob.glob()</code> here.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3                                                                                                        
+</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="n">fileList</span> <span class="o">=</span> <span class="n">glob</span><span class="p">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"../data/*.params"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fileList</span><span class="p">)):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">fileList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nb">exit</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Let’s run it</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python loopFiles.pl
+</code></pre></div></div>
+
+<p>If that did not work, <code class="language-plaintext highlighter-rouge">python</code> on your system likely points to Python 2 and this is written for Python 3. Systems may differentiate the two by requiring Python 3 be specified as</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 loopFiles.pl
+</code></pre></div></div>
+
+<h3 id="using-scripts-to-retrieve-information-from-files">Using scripts to retrieve information from files</h3>
+<p>Scripting is a helpful way to get results from our inevitable thousands of output files. Here are a couple of examples in Perl and Python that build upon looping over the file list. Now, each file is opened and we process them line-by-line to extract the relevant information. Our goal is to make one table with the parameter values for each params file.</p>
+
+<h4 id="getresultspl---a-regex-approach">getResults.pl - a regex approach</h4>
+<p>Scripting languages can use regular expressions (regex) to find patterns in strings. Good text editors can find and replace with text editors too. You can use them to save pieces of the string you care about and work with those further.</p>
+<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/perl -w                                                                                                          </span>
+
+<span class="nv">%data</span> <span class="o">=</span> <span class="p">();</span>
+
+<span class="nv">@fileList</span> <span class="o">=</span> <span class="nb">glob</span><span class="p">("</span><span class="s2">../data/*.params</span><span class="p">");</span>
+<span class="k">for</span> <span class="nv">$i</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="p">(</span><span class="nb">scalar</span><span class="p">(</span><span class="nv">@fileList</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">{</span>
+<span class="c1">#    print "$fileList[$i]\n";                                                                                               </span>
+    <span class="nb">open</span> <span class="nv">FH1</span><span class="p">,'</span><span class="s1">&lt;</span><span class="p">',"</span><span class="si">$fileList</span><span class="s2">[</span><span class="si">$i</span><span class="s2">]</span><span class="p">";</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">&lt;</span><span class="nv">FH1</span><span class="o">&gt;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="sr">/(\S+)\s+(\S+)/</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nv">$parameter</span> <span class="o">=</span> <span class="err">$</span><span class="mi">1</span><span class="p">;</span>
+            <span class="nv">$value</span> <span class="o">=</span> <span class="err">$</span><span class="mi">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$parameter</span> <span class="ow">ne</span> <span class="p">"</span><span class="s2">Parameter</span><span class="p">")</span>
+            <span class="p">{</span>
+                <span class="nb">push</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$data</span><span class="p">{</span><span class="nv">$parameter</span><span class="p">}},</span> <span class="nv">$value</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nb">close</span> <span class="nv">FH1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">print</span> <span class="p">"</span><span class="s2">File</span><span class="p">";</span>
+<span class="k">foreach</span> <span class="nv">$parameter</span> <span class="p">(</span><span class="nb">sort</span><span class="p">(</span><span class="nb">keys</span><span class="p">(</span><span class="nv">%data</span><span class="p">)))</span>
+<span class="p">{</span>
+    <span class="k">print</span> <span class="p">"</span><span class="se">\t</span><span class="si">$parameter</span><span class="p">";</span>
+<span class="p">}</span>
+<span class="k">print</span> <span class="p">"</span><span class="se">\n</span><span class="p">";</span>
+
+<span class="k">for</span> <span class="nv">$i</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="p">(</span><span class="nb">scalar</span><span class="p">(</span><span class="nv">@fileList</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">print</span> <span class="p">"</span><span class="si">$fileList</span><span class="s2">[</span><span class="si">$i</span><span class="s2">]</span><span class="p">";</span>
+    <span class="k">foreach</span> <span class="nv">$parameter</span> <span class="p">(</span><span class="nb">sort</span><span class="p">(</span><span class="nb">keys</span><span class="p">(</span><span class="nv">%data</span><span class="p">)))</span>
+    <span class="p">{</span>
+        <span class="k">print</span> <span class="p">"</span><span class="se">\t</span><span class="si">$data</span><span class="s2">{</span><span class="si">$parameter</span><span class="s2">}[</span><span class="si">$i</span><span class="s2">]</span><span class="p">";</span>
+    <span class="p">}</span>
+    <span class="k">print</span> <span class="p">"</span><span class="se">\n</span><span class="p">";</span>
+<span class="p">}</span>
+<span class="nb">exit</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Scripting languages give you access to helpful <em>data structures</em>. Here, I make a <em>hash</em> called <code class="language-plaintext highlighter-rouge">data</code>, which is denoted by the <code class="language-plaintext highlighter-rouge">%</code>. Hashes have two parts, the <em>key</em> and the <em>value</em>. This is different from an <em>array</em> where you only need to know the element number to access the value - it can be a string too. And here, I actually make a hash of arrays, where each key (a,b,c) gives us the values from the three different files. I then loop back over the data structure to print a matrix that we might work with in R.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>perl getReults.pl
+</code></pre></div></div>
+
+<h4 id="getresultspy---splitting-lines-and-tuples-for-keys">getResults.py - splitting lines and tuples for keys</h4>
+<p>Python can use regex too, but here I simply apply some prior knowledge about the params files to extract what I want. Python also uses hashes, but here the data structure is called a <em>dictionary</em> or <em>dict</em>. Here, we actually have a two-dimensional dictionary where each key is a <em>tuple</em>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3                                                                                                      
+</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">fileList</span> <span class="o">=</span> <span class="n">glob</span><span class="p">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"../data/*.params"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fileList</span><span class="p">)):</span>
+    <span class="n">InFile</span> <span class="o">=</span> <span class="nb">open</span> <span class="p">(</span><span class="n">fileList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">'r'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">Line</span> <span class="ow">in</span> <span class="n">InFile</span><span class="p">:</span>
+        <span class="n">Line</span> <span class="o">=</span> <span class="n">Line</span><span class="p">.</span><span class="n">strip</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+        <span class="n">ElementList</span> <span class="o">=</span> <span class="n">Line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ElementList</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ElementList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s">"Parameter"</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">ElementList</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">ElementList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'File</span><span class="se">\t</span><span class="s">Parameter</span><span class="se">\t</span><span class="s">Value'</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">fileList</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span><span class="n">data</span><span class="p">[(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)],</span><span class="n">end</span><span class="o">=</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="nb">exit</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>You might notice that when printing here, we access the keys a bit more efficiently than the Perl case and print out a file that would be more appropriate for tidyverse R packages, so you can start to see how things fit together here.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 getReults.py
+</code></pre></div></div>
+
+<h3 id="running-programs-on-the-cluster">Running Programs on the Cluster</h3>
+<p>We have <em>maybe</em> run scripts on our own systems. We can run those on the cluster too, but there are some rules. Because of how clusters are configured, we need to make a separate <em>submission script</em>. This lets the cluster know how much cpu and RAM to allocate to a job and checks that you have permissions to do so. We have an example submission script <code class="language-plaintext highlighter-rouge">testScripts.sh</code> in our <code class="language-plaintext highlighter-rouge">scripts</code> folder.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --job-name=testScripts</span>
+<span class="c">#SBATCH --output=testScripts.log</span>
+<span class="c">#SBATCH --mail-user=YOUR_EMAIL</span>
+<span class="c">#SBATCH --mail-type=FAIL,END</span>
+<span class="c">#SBATCH --time=2:00:00</span>
+<span class="c">#SBATCH --mem-per-cpu=1000M</span>
+<span class="c">#SBATCH --nodes=1</span>
+<span class="c">#SBATCH --ntasks=1</span>
+<span class="c">#SBATCH --cpus-per-task=1</span>
+<span class="c">#SBATCH --partition=common</span>
+<span class="c">#SBATCH --account=bio790s-01-f21</span>
+<span class="o">[[</span> <span class="nt">-d</span> <span class="nv">$SLURM_SUBMIT_DIR</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="nv">$SLURM_SUBMIT_DIR</span>
+
+perl getResults.pl
+python3 getResults.py
+</code></pre></div></div>
+
+<p>We will discuss the SLURM directives in class. The important thing is that you will need to open the submission script to edit YOUR_EMAIL. We then submit the script with <code class="language-plaintext highlighter-rouge">sbatch</code>. The steps in order will look something like this</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd scripts
+emacs testScripts.sh
+sbatch testScripts.sh
+</code></pre></div></div>
+<p>When we ran the scripts on our own system, they print to standard out. Your standard output from a submission script will go to the –output. In practice, many programs will generate output files for the important stuff or we can redirect the standard output with something like <code class="language-plaintext highlighter-rouge">python3 getResults.py &gt; pythonResults.txt</code>. Try editing and re-running the script to see yourself.</p>
+
+<h3 id="compiled-code">Compiled Code</h3>
+<p>Common examples of compiled languages are C and C++. They implement low-level functions compared to interpreted/scripting languages (e.g. it would take some creativity to re-implement the glob function), but they are more efficient with memory allocation and potentially faster. C and C++ underly many of the workhorses of the genomics field, such as BWA, BLAST, and RAxML.</p>
+
+<p>There is a silly example available for us to practice with. We will do this on the cluster since getting a good C compiler set up for Windows users can be time-consuming and frustrating. This should work for the mac and linux users though on your own systems.</p>
+
+<p>So, go into the <code class="language-plaintext highlighter-rouge">compiledExample</code> folder. Since you might still be in <code class="language-plaintext highlighter-rouge">/hpc/group/bio790s-01-f21/YOUR_USER_NAME/introduction/scripts</code>, all you need to do is go</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../compiledExample
+</code></pre></div></div>
+
+<p>To generate an executable program from the C code, we will run the gcc compiler as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -Wall -o betaSolver betaSolver.c solveBeta.c
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">-Wall</code> is telling gcc to print warning flags which you will often see when building popular software applications. Our source code is in two different files <code class="language-plaintext highlighter-rouge">betaSolver.c</code> and <code class="language-plaintext highlighter-rouge">solveBeta.c</code>, and we use <code class="language-plaintext highlighter-rouge">-o</code> to indicate the output program <code class="language-plaintext highlighter-rouge">betaSolver</code>
+You should now have the compiled C program <code class="language-plaintext highlighter-rouge">betaSolver</code>. Give it a try! Pull up the help menu and then see if you can get the program to do what it should.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./betaSolver -h
+</code></pre></div></div>
+
+<p>You almost never compile programs by invoking gcc yourself though. This would leave a lot of wiggle room for user errors. Thus, programs sometimes come with a Makefile. There is one to compile the <code class="language-plaintext highlighter-rouge">betaSolver</code> program for you to save some typing. Let’s see it in action.
+We will first delete the application, then run the makefile to re-compile it.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm betaSolver
+make
+</code></pre></div></div>
+
+<p>There will often be frustrating moments when compiling a program that you want to use, because you will run make and it will stop compiling with errors and give you very cryptic messages. As programs become very complex, there can be many external libraries that a program depends on. A step that happens with compiling is <em>linking</em> all of the bits of code scattered across a computer into a single computer-readable program. Let’s break our program.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make clean
+mv betaSolver.h wrong.h
+make
+</code></pre></div></div>
+<p>Makefiles sometimes come with a <em>clean</em> option, so that all of the compiled code is removed. We then change the name of our helper file to <code class="language-plaintext highlighter-rouge">wrong.h</code> so the compiler no longer fins the correct one. You will now get a error that stops the compiler. This is an easy issue to diagnose from the error message, but sometimes it is not. Often it is a linking problem and we will revisit this when compiling some crucial population genomic programs.</p>
+
+<h3 id="wrap-up">Wrap up</h3>
+<p>You have now logged onto the cluster edited some files and moved them around. You have transferred files between your computer and the cluster. You have successfully run some some scripts and compiled a program. Some system issues may arise that take longer to diagnose than in the time allowed here and we will troubleshoot those in the coming week in preparation for <em>de novo</em> genome assembly.</p>
+
+<h3 id="pro-tip">Pro Tip</h3>
+<p>It might get annoying over time with typing your password every time you want to do something on the cluster. You can get around this by setting up an rsa key on your computer and then placing the public key in a hidden folder in your home directory on the cluster. Duke has some special instructions about how to set this up in their <a href="https://rc.duke.edu/dcc/dcc-user-guide/">guide</a> about ssh public keys.</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/DBEV-Phylogenomics/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">DBEV Phylogenomics Workshop 2022</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">DBEV Phylogenomics Workshop 2022</li><li><a class="u-email" href="mailto:g.tiley@kew.org">g.tiley@kew.org</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gtiley"><svg class="svg-icon"><use xlink:href="/DBEV-Phylogenomics/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gtiley</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Workshop based on delivering contemporary and practical education materials for phylogenetics</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

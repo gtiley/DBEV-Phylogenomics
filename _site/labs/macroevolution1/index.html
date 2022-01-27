@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Genome Architecture | DBEV Phylogenomics Workshop 2022</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Genome Architecture" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<meta property="og:description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<link rel="canonical" href="http://localhost:4000/DBEV-Phylogenomics/labs/macroevolution1/" />
+<meta property="og:url" content="http://localhost:4000/DBEV-Phylogenomics/labs/macroevolution1/" />
+<meta property="og:site_name" content="DBEV Phylogenomics Workshop 2022" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Genome Architecture" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/DBEV-Phylogenomics/labs/macroevolution1/","@type":"WebPage","description":"Workshop based on delivering contemporary and practical education materials for phylogenetics","headline":"Genome Architecture","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/DBEV-Phylogenomics/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/DBEV-Phylogenomics/feed.xml" title="DBEV Phylogenomics Workshop 2022" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/DBEV-Phylogenomics/">DBEV Phylogenomics Workshop 2022</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/DBEV-Phylogenomics/about/">About</a><a class="page-link" href="/DBEV-Phylogenomics/people/">People</a><a class="page-link" href="/DBEV-Phylogenomics/schedule/">Schedule</a><a class="page-link" href="/DBEV-Phylogenomics/reading/">Reading</a><a class="page-link" href="/DBEV-Phylogenomics/conduct/">Code of Conduct</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Genome Architecture</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Disclaimer: We are only examining, maybe what could be called <em>macrosynteny</em>. We use protein-coding genes as our anchor points and are concerned only about the relative order. We will gloss over some of the intermediary steps today to focus on running the different software components, but can discuss strategies for going between the analysis and visualization.</p>
+
+<p>We will look at a subset of moss data from Carey et al. 2021<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>. This data is unrelated to our readings this week, but relevant to placing the 1R and 2R events in vertebrate evolution in Nakatani et al. 2021<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>. While they develop a probabilistic model of what the ancestral genomes look like, we will use a simple heuristic approach that can still be powerful. For the mosses, the main issue is that data suggests a single whole-genome duplication in <em>Ceratodon purpureus</em> and two whole-genome duplications in a very different species <em>Physcomitrium patens</em>. Our goal will be to use syntenic information to infer if these events were independent of each other or shared.</p>
+
+<p style="text-align: center;"><img src="/DBEV-Phylogenomics/images/ks_plate.png" alt="Carey et al. 2021 Fig. S2c" /></p>
+<p><strong>Fig. S2c from Carey et al. 2021<sup id="fnref:1:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>-</strong> Peaks in the distribution of <em>Ks</em> indicate whole-genome duplication. Because paralog peaks (the lighter color for all paralogs and darker color for syntenic paralogs) occur more recently that the ortholog divergences (the blue-greyish color), we might assume the events were independent and not shared.</p>
+
+<h3 id="homology">Homology</h3>
+
+<p>Extracting information about architecture requires us to infer homology within and between genomes. Although there are options, this typically means BLAST. The first step in examining synteny will be an all-by-all blast, where all genomes are blasted against themselves and everybody else. We do all pariwise combinations because which genome is the query or the database can affect the e-values. You will set up your own blast jobs on the cluster. Remember to copy the directory <code class="language-plaintext highlighter-rouge">macroevolution1</code> to your work directory. A few hints:</p>
+<ol>
+  <li>To set up the paths to BLAST and link the libraries correctly, add this module load line
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module load NCBI-BLAST/2.11.0-rhel8
+</code></pre></div>    </div>
+  </li>
+  <li>Before blasting, you will need to make the databases for each genome. This step is very fast
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makeblastdb -dbtype prot -in Ppat.protein.processed.fasta -out Ppat
+makeblastdb -dbtype prot -in CR40.protein.processed.fasta -out CR40
+</code></pre></div>    </div>
+  </li>
+  <li>We are using blastp because these are amino acid sequences. Here is one line, and you will need to do the other combinations. Be sure to correctly specify the number of threads you need in the SLURM directives.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blastp -num_threads 4 -max_target_seqs 10000 -max_hsps 1 -outfmt 6 -evalue 1e-40 -query Ppat.protein.processed.fasta -out Ppat.CR40.out -db CR40
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>For the sake of time, these output files are already available in the folder <code class="language-plaintext highlighter-rouge">blast_outfiles</code>. You will see each one is a tab-delimited table with the query and database hit. Because we specify a strict e-value cutoff in the blast options, we could consider all of these to be reasonable. These hits include, orthologs, paralogs, and errors - and alone do not tell us much. The hits can be used to discover the syntenic regions with some reasonable degree of error though.</p>
+
+<h3 id="synteny">Synteny</h3>
+
+<p>We will use the program MCScanX. There are other options, but this has been the tool of choice for the plant genomics community. It has now moved to github, which means you can download it to your local maschine using <em>git clone</em>. Once downloaded, you should be able to change directory and simply run make to compile. I suggest placing this exercise in its own directory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~/evolutionaryGenomics
+mkdir Macroevolution1
+cd Macroevolution1
+git clone https://github.com/wyp1125/MCScanX
+cd MCScanX
+make
+</code></pre></div></div>
+
+<p>Now, download the <code class="language-plaintext highlighter-rouge">MCScanX_Example</code> folder from the cluster to your computer. We will change into that folder and run MCScanX a few times.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd MCScanX_Example
+../MCScanX_h moss/moss -s 10 -m 20 -b 0
+</code></pre></div></div>
+<p>You will now see some output about the number of syntenic pairs between and within genomes. Does this look like a lot or a little? A few options here, -s is the number of genes needed to seed a region. Blocks less than 10 are ignored. -m is the number of interleaving genes allowed (the Manhattan distance). This means 20 non-syntenic genes are allowed to disrupt 2 anchorpoints and we are alright with that. -b tells MCScanX that we want both between genomes and within genomes. Try running different options for -s and -m that you think are reasonable and see if the results change much.</p>
+
+<p>Time to visualize the results. We will use provided dot-plot tool written in java. We will have to make three dot plots, two for within each genome and once between.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd dotPlots
+java dot_plotter -g ../moss/moss.gff -s ../moss/moss.colinearity -c Pp_Pp.ctl -o Pp_Pp.png
+java dot_plotter -g ../moss/moss.gff -s ../moss/moss.colinearity -c Cp_Pp.ctl -o Cp_Pp.png
+java dot_plotter -g ../moss/moss.gff -s ../moss/moss.colinearity -c Cp_Cp.ctl -o Cp_Cp.png
+</code></pre></div></div>
+
+<p>We know that both genome have experienced two rounds of whole-genome duplication, is this evident from their self-syntenic comparisons? Let’s look at the between comparisons, do the ratios between syntenic blocks provide any insights?</p>
+
+<h3 id="more-complex-visualization-with-circos">More Complex Visualization with Circos</h3>
+
+<p>Dot plots are nice because they are intuitive and straightforward enough to write your own plotter in base R for example. But when there are mulitple genomes this can become boring. And what if there are other data you want to display? That is where circos is helpful. It can sometimes be tricky to install, so in lieu of hands-on, I will simply demonstrate the tool.</p>
+
+<p>The example files used for the circos plot based on the MCScanX results are in <code class="language-plaintext highlighter-rouge">circos_example</code>.  Once you understand some of the basic rules of circos’ control files, it becomes easy to layer on more complexity. The danger with these plots is that is can become too complex to be interpreted by your readers, but that is your call to strike the balance for the audience.</p>
+
+<p>For those interested, we can walk through the install. Circos can be downloaded <a href="http://circos.ca/software/download/">here</a>. It is completely written in Perl, so does not require compiling, but requires the installation of several Perl modules. I decided to re-install for class and it took me about 10 minutes, but remember my first time took hours…maybe days?</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Carey SB, et al. 2021. Gene-rich UV sex chromosomes harbor conserved regulators of sexual development. Sci Adv. 7:eabh2488. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:1:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>Nakatani Y, et al. 2021. Reconstruction of proto-vertebrate, proto-cyclostome and proto-gnathostome genomes. Nat Comms. 12:4489. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/DBEV-Phylogenomics/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">DBEV Phylogenomics Workshop 2022</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">DBEV Phylogenomics Workshop 2022</li><li><a class="u-email" href="mailto:g.tiley@kew.org">g.tiley@kew.org</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gtiley"><svg class="svg-icon"><use xlink:href="/DBEV-Phylogenomics/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gtiley</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Workshop based on delivering contemporary and practical education materials for phylogenetics</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>de Bruijn Graphs and OLC | DBEV Phylogenomics Workshop 2022</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="de Bruijn Graphs and OLC" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<meta property="og:description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<link rel="canonical" href="http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly1/" />
+<meta property="og:url" content="http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly1/" />
+<meta property="og:site_name" content="DBEV Phylogenomics Workshop 2022" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="de Bruijn Graphs and OLC" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/DBEV-Phylogenomics/labs/genomeAssembly1/","@type":"WebPage","description":"Workshop based on delivering contemporary and practical education materials for phylogenetics","headline":"de Bruijn Graphs and OLC","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/DBEV-Phylogenomics/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/DBEV-Phylogenomics/feed.xml" title="DBEV Phylogenomics Workshop 2022" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/DBEV-Phylogenomics/">DBEV Phylogenomics Workshop 2022</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/DBEV-Phylogenomics/about/">About</a><a class="page-link" href="/DBEV-Phylogenomics/people/">People</a><a class="page-link" href="/DBEV-Phylogenomics/schedule/">Schedule</a><a class="page-link" href="/DBEV-Phylogenomics/reading/">Reading</a><a class="page-link" href="/DBEV-Phylogenomics/conduct/">Code of Conduct</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">de Bruijn Graphs and OLC</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Assembling a reference genome <em>de novo</em> has become easier over time, with decreasing costs and more efficient assemblers. Long-read data has especially been a game-changer that has helped overcome some of the notable weaknesses of assemblies based on short-reads alone. Still significant challenges remain in the pursuit of chromosome-level assemblies. Today, we start the process of assembling a chromosome level genome by getting <em>contigs</em>. Next week, we will focus on how these contigs are arranged into <em>scaffolds</em>. Here are today’s goals, some of which will not be possible until next week when assemblies are done.</p>
+<ol>
+  <li>Understand the formats of Illumina and PacBio data</li>
+  <li>Describe a kmer and general assembly algorithm strategies</li>
+  <li>Run some assembly software</li>
+  <li>Evaluate contig assembly quality</li>
+  <li>Compare assemblies that use or do not use long reads</li>
+</ol>
+
+<p>Because each assembly is resource intensive you will run analyses in your <code class="language-plaintext highlighter-rouge">/work</code> directory. You will also work in teams of two.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Team (Spotter/Driver)</th>
+      <th>Strategy</th>
+      <th>Software</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mantis (Blake/Melodie)</td>
+      <td>Bad kmer - short only</td>
+      <td>Abyss</td>
+    </tr>
+    <tr>
+      <td>Ctenophore (Carlos/Gabi)</td>
+      <td>optimal kmer - short only</td>
+      <td>Abyss</td>
+    </tr>
+    <tr>
+      <td>Raptor (Elissa/Shannon)</td>
+      <td>high coverage - long only</td>
+      <td>Canu</td>
+    </tr>
+    <tr>
+      <td>Big Bluestem (Ian/Tristan F-B)</td>
+      <td>low coverage - long only</td>
+      <td>Canu</td>
+    </tr>
+    <tr>
+      <td>Polyploid Admixed Yeast (Elise/Marta)</td>
+      <td>hybrid data</td>
+      <td>MaSurCa</td>
+    </tr>
+    <tr>
+      <td>Scaly Tree Fern (Hannah/Tristan F)</td>
+      <td>hybrid algo - short only</td>
+      <td>MaSurCa</td>
+    </tr>
+    <tr>
+      <td>Mouse Lemur (George/Anne)</td>
+      <td>hybrid data - long low</td>
+      <td>MaSurCa</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We are not making the most scientific comparison of assemblers, but we should be able to get some gestalt of what is useful for genome assemblies. The three assemblers we are comparing here are:</p>
+<ol>
+  <li>Abyss - A de Bruijn graph short read assembler that has performed well and been maintained over time. Capable of assembling large genomes with many libraries.</li>
+  <li>Canu - Uses an OLC algorithm from the Celera assembler but does some smart tricks to allow fuzzy matching due to error</li>
+  <li>MaSurCa - We read the manuscript for this one. A somewhat hybrid algorithm that bins short reads in larger sequences subsequently used for OLC. Capable of using <em>polished</em> long reads.</li>
+</ol>
+
+<h3 id="thrips">Thrips!</h3>
+<p>We will focus on a recently published thrip genome<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>. Why? The genome is small, about 200Mb. We still get to work with a diploid though since the libraries were constructed from a single female. Plus, thrips have a lot of gene duplications that should make things interesting. The authors generated three types of data:</p>
+<ol>
+  <li>Vanilla Illumina (60x) 150bp paired-end reads - Basic Illumina library prep protocol with a 500bp insert size. These libraries are ubiquitous to both <em>de novo</em> assemblies and population resquencing experiments.</li>
+  <li>PacBio Sequel (120x) long reads - The Sequel had higher error rates than the current HiFi machines, but are still high quality and compensated by the insane <em>depth</em> here. Larger insert sizes are possible, but most of these are around 6Kb.</li>
+  <li>High-throughput chromosome conformation capture (Hi-C) Illumina (300x) 150bp paired-end reads - These libraries are used for scaffolding, which will be the focus of next week. Cross-linking and digestion of chromatin proteins are used to generate libraries with a range of large inserts. Hi-C data is used in other contexts too, but has been transformative for genome assembly.</li>
+</ol>
+
+<p>The data has been organized in our folder on the cluster</p>
+
+<p><strong>Vanilla Illumina</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/Illumina/SRR11591408_1.fq.gz
+/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/Illumina/SRR11591408_2.fq.gz
+</code></pre></div></div>
+<p>There is file for both the forward and reverse read from the paired-end data. The fastq files contain information on both the sequences and the per-base qualities of those sequences. If this is your first time working with fastq data, have a peak at one of the files</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>less /hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/Illumina/SRR11591408_1.fq.gz
+</code></pre></div></div>
+<p>Note the first line of each read starts with a “@” for the header. When data do not come from SRA, these will be strings of numbers to indicated the read’s address on a sequencing machine. The second line is the detected sequence. The third line is the header again but with a “+”. This is to help file readers parse the next string of quality scores. The quality scores are represented by standard keyboard characters used for communication between computers (ASCII) that are all associated with a number between 0 and 127. These numbers are used to determine the probability of an erroneous base call, see an explanation by muscle man Robert Edgar <a href="https://www.drive5.com/usearch/manual/quality_score.html">here</a>.
+Because assemblers need accurate data to get the assembly right, discarding a few really bad reads and adaptor contamination can be a good idea. Reads cleaned in advance by Trimmomatic are available too</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/Illumina/trimmed_1.fq.gz
+/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/Illumina/trimmed_2.fq.gz
+</code></pre></div></div>
+<p><strong>PacBio</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/data/PacBio/SRR11148454.fasta
+</code></pre></div></div>
+<p>PacBio data is typically processed with PacBio’s proprietary software that handles adapter removal. You might sometimes see PacBio data delivered as a fastq - but the quality scores are pretty meaningless. Instead, PacBio reads leverage <em>circular consensus sequencing</em> (CCS) that should swamp out the noise by sequencing the same molecular many times over.</p>
+
+<h3 id="assembling-in-the-work-directory">Assembling in the /work directory</h3>
+<p>Last time on the cluster, we did our work on <code class="language-plaintext highlighter-rouge">/hpc/group/bio790s-01-f21</code>. Clusters will often have limited long-term storgage space and more headroom in a temporary scratch directory. This directory on DCC is called <code class="language-plaintext highlighter-rouge">/work</code> and every user will have their personal directory in there. Be sure to run your jobs in <code class="language-plaintext highlighter-rouge">work</code> or we will quickly run out of space. Genome assemblies generate many temporary files that consume disk space but are of no value once the assembly is done.
+Your driver will log onto the cluster and copy their respective teams template files to their user directory in work. Spotters will help their drivers edit and execute the templates. Take time to learn about the program options, investigate what they do, and discuss.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh YOUR_USER_NAME@dcc-login.oit.duke.edu
+cd /work/YOUR_USER_NAME
+mkdir evolutionaryGenomics
+cd evolutionaryGenomics
+cp -r /hpc/group/bio790s-01-f21/evolutionaryGenomics/genomeAssembly1/YOUR_TEAM .
+cd YOUR_TEAM
+mkdir temp
+emacs runAssembler.sh
+sbatch runAssembler.sh
+</code></pre></div></div>
+<p>Observe that your jobs starts without incident and inspect the logs. Can you find some basic information about coverage, kmer distributions, and expected genome size? This is going to take a while but should be ready by next week. You can check on how your job is doing with some SLURM commands on the cluster</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>squeue -u YOUR_USER_NAME
+</code></pre></div></div>
+<p>You can also track the progress by checking the log files and confirming there are no error messages.</p>
+
+<h3 id="measuring-assembly-quality">Measuring assembly quality</h3>
+<p>A classic summary statistic is <em>N50</em>. This is when 50% of the <em>assembly</em> is represented by contigs of length n or greater. Typically, the bigger the N50 the better, and this can improve with increased sequencing depth, but only to an extent and there are diminishing returns. <em>L50</em> might also come up some times, this is the number of contigs that contain 50% of the genome. When genome size is known from some external evidence such as flow cytometry or optical mapping, you can also calculate <em>NG50</em>. This differs from N50 because it is based on the genome size and not the assembly size; assemblies are always shorter than the true genome size.
+Many assemblers will calculate these statistics for you, but when comparing multiple assemblies, it is a good idea to use a single software since different developers might, for example, exclude contigs less than 1 Kb. Quast is a good choice for generating these stats. We are waiting for our own assemblies, but you can run it on the thrip reference assembly to get an idea of what to expect. Remember to edit the quast script for SLURM with your appropriate information.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>emacs runQuast.sh
+sbatch runQuast.sh
+</code></pre></div></div>
+
+<p>Can you find the relevant information in the quast output folder? It generates a nice html file that you can view, but you will need to scp it to your local computer. If you do not remember how to do this, have a look at last weeks activity. When your assembly finishes, your will need to edit the quast script to run it on your assembly.</p>
+
+<h3 id="references">References</h3>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Guo S-K, Cao L-J, Song W, Shi P, Gao Y-F, Gong Y-J, Chen J-C, Hoffmann AA, Wei S-J. 2020. Chromosome level assembly of the melon thrips genome yields insights into evolution of sap-sucking lifestyle and pesticide resistance. Mol Ecol. 20:1110-1125. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/DBEV-Phylogenomics/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">DBEV Phylogenomics Workshop 2022</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">DBEV Phylogenomics Workshop 2022</li><li><a class="u-email" href="mailto:g.tiley@kew.org">g.tiley@kew.org</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gtiley"><svg class="svg-icon"><use xlink:href="/DBEV-Phylogenomics/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gtiley</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Workshop based on delivering contemporary and practical education materials for phylogenetics</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

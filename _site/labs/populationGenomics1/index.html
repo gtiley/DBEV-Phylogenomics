@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Variant Calling and Filtering | DBEV Phylogenomics Workshop 2022</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Variant Calling and Filtering" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<meta property="og:description" content="Workshop based on delivering contemporary and practical education materials for phylogenetics" />
+<link rel="canonical" href="http://localhost:4000/DBEV-Phylogenomics/labs/populationGenomics1/" />
+<meta property="og:url" content="http://localhost:4000/DBEV-Phylogenomics/labs/populationGenomics1/" />
+<meta property="og:site_name" content="DBEV Phylogenomics Workshop 2022" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Variant Calling and Filtering" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/DBEV-Phylogenomics/labs/populationGenomics1/","@type":"WebPage","description":"Workshop based on delivering contemporary and practical education materials for phylogenetics","headline":"Variant Calling and Filtering","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/DBEV-Phylogenomics/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/DBEV-Phylogenomics/feed.xml" title="DBEV Phylogenomics Workshop 2022" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/DBEV-Phylogenomics/">DBEV Phylogenomics Workshop 2022</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/DBEV-Phylogenomics/about/">About</a><a class="page-link" href="/DBEV-Phylogenomics/people/">People</a><a class="page-link" href="/DBEV-Phylogenomics/schedule/">Schedule</a><a class="page-link" href="/DBEV-Phylogenomics/reading/">Reading</a><a class="page-link" href="/DBEV-Phylogenomics/conduct/">Code of Conduct</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Variant Calling and Filtering</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Genotyping can generally be taken as determining the genotype of a set of individuals, but this is conventionally used to mean reference-based alignment and variant calling of populations. We previously focused on strategies for obtaining the best-possible reference assembly. Using the same sequencing strategies across many individuals for multiple populations is not an efficient use of resources - rather we will use a single very standard Illumina library per individual. Each individual is aligned to the reference genome, which introduces error manifested as mapping uncertainty. Because a site is sequenced many times with increased coverage, piles of reads can be used to diagnose true variants versus stochastic sequencing error or other artifacts such as paralogy. This is accomplished by first identifying as many candidate variants as possible, and then using filtering strategies to reduce as many false positives as positive.</p>
+<ol>
+  <li>Perform joint genotyping with GATK</li>
+  <li>Know simple strategies for parallelizing genotyping</li>
+  <li>Recognize the difference between site-based and haplotype-based genotyping</li>
+  <li>Use some standard filtering tools</li>
+  <li>Generate summary statistics from a VCF</li>
+</ol>
+
+<p>Again, we will work in teams of two. Genotyping will use many cpus and disk space, so you will run analyses in your <code class="language-plaintext highlighter-rouge">/work</code> directory.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Team (Spotter/Driver)</th>
+      <th>Mapping Score</th>
+      <th>Variant Filters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mantis (Blake/Tristan F-B)</td>
+      <td>none</td>
+      <td>Basic</td>
+    </tr>
+    <tr>
+      <td>Ctenophore (Ian/Carlos)</td>
+      <td>none</td>
+      <td>Basic + depth</td>
+    </tr>
+    <tr>
+      <td>Raptor (Elissa/Tristan F)</td>
+      <td>none</td>
+      <td>Basic + depth + mac</td>
+    </tr>
+    <tr>
+      <td>Big Bluestem (Melodie)</td>
+      <td>q30</td>
+      <td>Basic + depth</td>
+    </tr>
+    <tr>
+      <td>Polyploid Admixed Yeast (Elise/Gabi)</td>
+      <td>q30</td>
+      <td>Basic + depth + mac</td>
+    </tr>
+    <tr>
+      <td>Scaly Tree Fern (Hannah/Karn/Marta)</td>
+      <td>q30</td>
+      <td>Basic + depth + mac + miss</td>
+    </tr>
+    <tr>
+      <td>Mouse Lemur (Lotus/Shannon)</td>
+      <td>q30</td>
+      <td>Brutal (GQ &gt; 60 + no missing)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="setup">Setup</h3>
+<p>There will be a lot of new tools introduced very quickly here.</p>
+<ul>
+  <li>BWA</li>
+  <li>Samtools/Bamtools</li>
+  <li>Picard</li>
+  <li>GATK</li>
+  <li>bcftools</li>
+  <li>vcftools</li>
+</ul>
+
+<p>A lot of these have been pre-configured on the cluster for our use, but be warned, getting some installed correctly on your own cluster or local machine can be time-consuming and frustrating. There are some tricks in some cases, such as using a docker container for GATK. We will make extensive use of the module system today, which should handle most of our library linking problems.</p>
+
+<p>Our data today and for the next few weeks will be sparrows<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>. There is a reference genome and 10 individuals per population. The study is focused on three populations, which we will explore when we read the paper and perform some downstream analyses. Start by copying today’s folder with the data and some pre-configured scripts over to work.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /work/YOUR_ID/evolutionaryGenomics
+cp -r /hpc/group/bio790s-/evoltuoinaryGenomics/populationGenomics1 .
+cd populationGenomics1
+ls
+</code></pre></div></div>
+<p>You should see the following folders</p>
+<ul>
+  <li>reference - the reference genome sequence and some metadata tables are in here</li>
+  <li>bams - we will generate the alignments here</li>
+  <li>genotyping - where the genotyping will happen</li>
+  <li>filteredVCF - a place to keep the final multi-sample vcf files</li>
+</ul>
+
+<h3 id="reference-alignment">Reference Alignment</h3>
+<p>BWA was used previously be Juicer to align the Hi-C reads to the contigs. Now, we will think a bit more of what is going on here. The reference genome is indexed using a suffix array which is then searched against by your millions of short reads compressed by an algorithm called Burrows-Wheeler Transform. It is a well-characterized way to reduce complexity in string search space used also by Bowtie. Perhaps BWA became so popular because it was from the same group also thinking about the downstream processing tools Samtools and ultimately how we represent genomic data today with all of the quality score goodness. In most cases there is no need to change the defaults with BWA, let it do its thing and we can think about errors in post. Keep in mind that for each alignment, BWA produces a mapping quality score (mapq). Like other quality scores we have seen, these are Phred-Scaled probabilities that an alignment is incorrect. I have often seen mapq of 30 treated as sufficient, which is saying that the probability of an error of 0.001 is acceptable.</p>
+
+<p>Read groups are added when aligning with BWA too. Read groups provide metadata, such as the individual sequenced and the library. If you have multiple libraries, you <em>need</em> read groups so PCR duplicates can be correctly identified and omitting them will cause problems. This is annoying to fix later on, so I always recommend adding read groups, even if you have a single library per individual.</p>
+
+<p>BWA can also be chained together with Samtools. This is largely to reduce the need for intermediary files by piping output from one program to another. Notice we will bypass the sam format altogether and jump immediately to the binary bam format. The bam will also be sorted, which is necessary for reading by downstream tools like GATK. The command will look something like this for a single individual.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bwa index reference.fasta
+bwa mem <span class="nt">-R</span> <span class="s1">'@RG\tID:id1\tSM:sp1\tPL:illumina\tLB:lib1'</span> <span class="nt">-t</span> 4 reference.fasta ind1_R1.fq.gz ind1_R2.fq.gz | samtools view <span class="nt">-bS</span> <span class="nt">-F</span> 4 - | samtools <span class="nb">sort</span> - <span class="nt">-o</span> ind1.sorted.bam
+</code></pre></div></div>
+<p>But we have to do the alignment step for 30 individuals! So, our strategy will be to do all of the indexing first, including for downstream samtools applications and for GATK (using Picard). Then, we will use a script to launch all of the BWA jobs for us. This builds off of the <strong>loopFiles</strong> examples from our first class. I provide a Perl version here, but can you edit the Python loopFiles template to achieve the same goal?
+Normally you would do these steps, but since it is repetitive with past exercises, I have made the bams in advance - you can skip the next code block.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd reference
+emacs indexGenome.sh
+sbatch indexGenome.sh
+cd ../bams
+perl bwa.pl
+</code></pre></div></div>
+
+<h3 id="genotyping">Genotyping</h3>
+<p>Haplotype-based genotypers are arguably regarded as the best based on benchmarking studies and include GATK and FreeBayes. They also have to make some assumptions that may not always be appropriate though. bcftools is also capable doing the genotyping for you and will be a lot faster. It can similarly solve haplotype phase, but does not perform this haplotype-based realignment of active regions, it calculated the genotype likelihoods per-site from the bam directly. ANGSD is a very intersting option that uses uncertainty in the data by weighting with genotype likelihoods rather than trying to make calls - this can be advantageous in some cases but not always compatible with downstream analyses. We will use GATK in-part because of it’s popularity but remain open that other choices are good and perhaps preferable under some scenarios.</p>
+<p style="text-align: center;"><img src="/DBEV-Phylogenomics/images/GATK_Fig2.jpg" alt="Poplin et al. 2018 Fig. S6" /></p>
+<p><strong>Fig. 2 from Poplin et al. 2018<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>-</strong> Local re-alignments are performed in regions determined to have variation from the bam (active regions). The read distributions are used to detect haplotype combinations and ultimately estimate the genotype likelihoods.</p>
+
+<p>The basic commands look something like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>picard MarkDuplicates <span class="nv">I</span><span class="o">=</span>ind1.sorted.bam <span class="nv">O</span><span class="o">=</span>ind1.marked.bam <span class="nv">M</span><span class="o">=</span>ind1.metrics.txt                                                                
+gatk HaplotypeCaller <span class="nt">-R</span> reference.fasta <span class="nt">-I</span> ind1.marked.bam <span class="nt">-O</span> ind1.g.vcf <span class="nt">-ERC</span> GVCF <span class="nt">--native-pair-hmm-threads</span> 4 
+</code></pre></div></div>
+<p>But again, this step needs to be repeated for all individuals! Remember to edit your email in the Perl script before running! Have a look at how we loop over the individuals based on the available bams and write out the relevant SLURM scripts that will do the work for us. It is possible to accomplish this with job arrays through SLURM too, but this is simply how I learned to do things. If you are using the reads already filtered for mapping quality, you will need to change the script accordingly. I also commented out the final sbatch command the submit the jobs in case you want to run it and see what happens first. When you are ready to submit all of the jobs, uncomment this.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../genotying
+perl gatkGVCF.pl
+</code></pre></div></div>
+<p>The output will be that each individual gets a <strong>.*g.vcf</strong> file. These are intermediary formats with information about the variants discovered within individuals that will be pooled with the other samples in the joint calling step. This will take some time, but when it is done, we move on to the joint calling that takes a slightly different strategy to parallelization.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gatk GenomicsDBImport <span class="nt">--genomicsdb-workspace-path</span> database <span class="nt">--intervals</span> interval <span class="nt">--sample-name-map</span> sample.map <span class="nt">--tmp-dir</span><span class="o">=</span>temp <span class="nt">--reader-threads</span> 4
+gatk GenotypeGVCFs <span class="nt">-R</span> reference.fasta <span class="nt">-V</span> gendb://database <span class="nt">-O</span> interval.joint.vcf
+</code></pre></div></div>
+<p>First, all of the individual .g.vcf files are collected into a database where those individual genotype likelihoods estimates are used in a multi-sample model to call variants in the population. To speed up this process, we can define a specific <em>interval</em> on which to operate. The intervals would be headers in reference fasta file, hopefully chromosome names. In our case we will loop over the scaffolds that have been assigned to chromosomes and not worry about the unanchored bits of the assembly. It is my personal opinion that those unanchored bits are of limited use and often raise more issues than provide resolution to the question at hand. Those databased are then passed to the joint genotyping step - GenotypeGVCFs.
+These steps are implemented in the provided Perl script. The script also generates some commands for combining the interval VCFs together, filtering out everything that is not a biallelic SNP, and then filtering away things that do not pass what we are calling basic filters. These are very rough recommendations from the GATK devs, that most people deviate from in practice to fit their needs, but they are a good place to start. If you have the Brutal filter, you will need to add an extra filter expression (“GQ &lt; 60”).</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ../jointGenotyping
+perl gatkJoint.pl
+#after joint calling is finished
+sbatch gatkFilter.sh
+</code></pre></div></div>
+
+<h3 id="filtering">Filtering</h3>
+<p>We have already done a bit of light filtering based on some features such as strand biases and mapping, but setting some filters require probing of our candidate variants. Perhaps most important is depth. We want to get rid of sites with low mean depth and mask variants in individuals with low depth. High depth can be a problem too if it is greater than expected, as it likely represents paralogy or other mapping issues<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup>. A number of depth filters have been proposed, but a simple rule is 2x the mean depth. This should address problems from recent or tandem duplicates - older duplicates that have moved throughout the genome should hopefully have enough difference in their mapping scores to be viable. We will also look for odd individuals that we would be suspicious about based on heterozygosity and allele balance. We will set some threshold of missing data too.</p>
+
+<p>Here vcftools is used to generate a number of summary statistics about the post-GATK-filtered vcf. We can then take those files to look at the distributions in R. We will do this together in real-time, but I largely follow the recommendations from the <a href="https://speciationgenomics.github.io/filtering_vcfs/">speciation genomics workshop</a>. These are the flags we will use to get some helpful information:</p>
+<ul>
+  <li>–freq2 (allele frequency - relevant to mac filter)</li>
+  <li>–depth (mean depth of each individual)</li>
+  <li>–site-mean-depth (mean depth of each site)</li>
+  <li>–site-quality (mean genotype quality score - Phred-scaled difference between best and next best genotype)</li>
+  <li>–missing-indv (missing data per individual)</li>
+  <li>–missing-site (missing data per site)</li>
+  <li>–het (heterozygosity per individual)</li>
+</ul>
+
+<p>The relevant output files can be generated with <code class="language-plaintext highlighter-rouge">vcfStats.sh</code> in the vcfStats folder. The filters will then be applied in <code class="language-plaintext highlighter-rouge">filterVCF.sh</code>. You should remove or add filters as necessary to match your teams filtering strategy. The Brutal filters should set MISS=1. bcftools are also used here to count the number of variants before any filtering and how many are left after filters. How do your results look? We also call bcftools three times to generate vcfs with subsets of individuals - these will be used in three weeks and getting to this step will take some time.</p>
+
+<h4 id="caveat">Caveat</h4>
+<p>Note that we have done this in a way where GATK ignores parts of the genome where it does not find variants. This can be problematic if you need to know something about callability, and even for some popgen stats. If you need to differentiate invariant sites from a lack of information about a site, use -ERC BP_RESOLUTION in the HaployeCaller step. Be warned this will generate much larger vcf files, since it will be every site in the reference genome.</p>
+
+<h3 id="references">References</h3>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Elgvin TO, et al. 2017. The genomic mosaicism of hybrid speciation. Sci Adv. 3:e1602996. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>Poplin R, et al. 2018. Scaling accurate genetic variant discovery to tens of thousands of samples. bioRxiv doi:10.1101/201178 <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:3" role="doc-endnote">
+      <p>Li H. 2014. Toward better understanding of artifacts in variant calling from high-coverage samples. Bioinformatics 30:2843-2851. <a href="#fnref:3" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/DBEV-Phylogenomics/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">DBEV Phylogenomics Workshop 2022</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">DBEV Phylogenomics Workshop 2022</li><li><a class="u-email" href="mailto:g.tiley@kew.org">g.tiley@kew.org</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gtiley"><svg class="svg-icon"><use xlink:href="/DBEV-Phylogenomics/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gtiley</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Workshop based on delivering contemporary and practical education materials for phylogenetics</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
