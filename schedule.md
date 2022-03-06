@@ -8,7 +8,7 @@ Content will be added to the scedule on a weekly basis as the class progresses. 
 
 |Date      |Time       |Module                                |Slides                                                              |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
-|  7 March |10:00-12:00| Phylogenetic Theory                  |  [Maximum Likelihood]({{site.baseurl}}/slides/ML-20220306.pdf/)             |
+|  7 March |10:00-12:00| Phylogenetic Theory                  |  [Maximum Likelihood](https://github.com/gtiley/DBEV-Phylogenomics/blob/gh-pages/slides/ML-20220306.pdf/)             |
 |  7 March |12:00-13:00| Break/Lunch                                |                 |
 |  7 March |13:00-15:00| Phylogenetic Lab                     |  [ML with IQTREE]({{site.baseurl}}/labs/ML/)         |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
