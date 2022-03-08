@@ -12,7 +12,7 @@ Content will be added to the scedule on a weekly basis as the class progresses. 
 |  7 March |12:00-13:00| Break/Lunch                                |                 |
 |  7 March |13:00-15:00| Phylogenetic Lab                     |  [ML with IQTREE]({{site.baseurl}}/labs/ML/)         |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
-|  8 March |10:00-12:00| Species Trees Theory                 |  [Multispecies Coalescent](https://github.com/gtiley/DBEV-Phylogenomics/blob/gh-pages/slides/MSC-20220307.pdf/)              |
+|  8 March |10:00-12:00| Species Trees Theory                 |  [Multispecies Coalescent](https://github.com/gtiley/DBEV-Phylogenomics/blob/gh-pages/slides/MSC-20220308.pdf/)              |
 |  8 March |12:00-13:00| Break/Lunch                            |                |
 |  8 March |13:00-15:00| Species Trees Lab                    |  MSC with ASTRAL               |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
