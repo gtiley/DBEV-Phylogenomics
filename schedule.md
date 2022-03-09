@@ -16,9 +16,9 @@ Content will be added to the scedule on a weekly basis as the class progresses. 
 |  8 March |12:00-13:00| Break/Lunch                            |                |
 |  8 March |13:00-15:00| Species Trees Lab                    |  [MSC with ASTRAL]({{site.baseurl}}/labs/MSC/)              |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
-|  9 March |10:00-12:00| Genomics and Phylogenomic Support    |  TBD               |
+|  9 March |10:00-12:00| Genomics and Phylogenomic Support    |  [Tree Support and Visualization](https://github.com/gtiley/DBEV-Phylogenomics/blob/gh-pages/slides/TSAV-20220309.pdf/)             |
 |  9 March |12:00-13:00| Break/Lunch                                |                |
-|  9 March |13:00-15:00| Support and Visualization Lab        |  TBD               |
+|  9 March |13:00-15:00| Support and Visualization Lab        |  Guided visualization with Figtree and R               |
 |----------|-----------|--------------------------------------|--------------------------------------------------------------------|
                                                  
 [comment]: # [Introduction]({{site.baseurl}}/labs/introduction/)
